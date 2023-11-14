@@ -6,14 +6,6 @@ import { Steps, Callout } from 'nextra/components'
 
 Welcome to the comprehensive tutorial on seamlessly integrating your decentralized application (Dapp) with Reclaim using Solidity and Ether.js. This integration will empower your Dapp to verify user claims and execute actions based on their identity, providing a robust and secure user experience.
 
-## Prerequisites
-
-Before you begin, make sure you have the following:
-
-- Dapp ready with client app and smart contract
-- [ethers.js library](https://github.com/ethers-io/ethers.js)
-- [@semaphore-protocol/identity](https://github.com/semaphore-protocol/semaphore/tree/main/packages/identity)
-
 ## Steps
 
 We'll walk you through a series of steps to integrate your Dapp with Reclaim for identity verification and action execution.
@@ -21,7 +13,29 @@ We'll walk you through a series of steps to integrate your Dapp with Reclaim for
 <Steps>
 ### **Register your Smart Contract in Reclaim**
 
-#### Required Libraries
+You can register your dapp either programmatically using a script or via the Reclaim Protocol's developer portal.
+
+#### Non-Programmatically Using Reclaim's Developer Portal
+
+- **Navigate to Reclaim Protocol's Developer Portal**: Visit [Reclaim Protocol's Developer Portal](https://dev.reclaimprotocol.org).
+
+- **Access the `Integrate` Section**: In the developer dashboard, locate and navigate to the "Integrate" section.
+
+- **Complete the Integration Steps**:
+
+  1. Enter the name of your dapp.
+  2. Select your preferred data providers.
+  3. Add any whitelisted domains associated with your dapp.
+  4. When registering, confirm the `on-chain app` option by selecting "yes".
+  5. Connect your wallet to the portal.
+  6. Choose the network you wish to deploy on from the available options.
+  7. Click on the `Register` button to finalize the registration of your dapp.
+
+- **Retrieve Your DappId and Nullifier**: Upon successful registration, you'll be redirected to the applications list. Here, you can find and note down the `dappId` and `nullifier` for your dapp, which are essential for future steps.
+
+#### Programmatically Using a Script
+
+###### Required Libraries
 
 Before you begin, ensure that you have the necessary libraries and tools installed. You will need:
 
@@ -104,7 +118,6 @@ contract YourSmartContract {
 
 - **Data Storage:** Ensure that you store the generated proof after the claim is successfully verified. This proof will be needed for the next step in the process.
 
-
 ### Merkelize User
 
 Before your dapp contract can verify a user's identity, the user must submit a Reclaim proof to the Reclaim contract and be added to a Merkel tree. To achieve this, you need to call `Reclaim.merkelizeUser()` within the `onSuccess` callback of proof generation on the frontend, after successfully receiving the proof.
@@ -143,6 +156,7 @@ export default function UserMerkelizer({ proofObj, identity }) {
   //... Rest of the code
 }
 ```
+
 ### Completing the Action
 
 After ensuring that the user is merkelized, you can call your smart contract action (for example, `YourSmartContract.airDrop()`). We recommend adding a non-trivial time delay between calling `merkelizeUser` and submitting the proof to your contract. The longer the time delay, the higher the degree of anonymization.
